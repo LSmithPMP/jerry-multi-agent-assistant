@@ -1,0 +1,758 @@
+{
+  "name": "Building Jerry: Your Multi-Agent Assistant",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2176,
+        0
+      ],
+      "id": "1f6db9dd-0a93-4bee-abf0-145b7ba68150",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -2176,
+        432
+      ],
+      "id": "3ca5df7c-0088-4158-a5b8-429e4be5c204",
+      "name": "When chat message received",
+      "webhookId": "827fe5e8-77e3-4ff4-a187-ca66d7f5ebdf",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1952,
+        864
+      ],
+      "id": "6655a54a-7c88-49e8-9758-22be17eaf146",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1824,
+        864
+      ],
+      "id": "220d33ab-2dd1-4d82-a318-c896124a5177",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1696,
+        864
+      ],
+      "id": "6eefb53a-86b6-415a-98d1-9d66e5c26b85",
+      "name": "Get many messages in Gmail",
+      "webhookId": "b77947d6-ff9e-4ab1-87a1-e749dba0aa0a"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1568,
+        864
+      ],
+      "id": "cbf561cc-f717-4324-9725-76c4fd4f1349",
+      "name": "Send a message in Gmail",
+      "webhookId": "b77947d6-ff9e-4ab1-87a1-e749dba0aa0a"
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1440,
+        864
+      ],
+      "id": "5afd9818-d416-410c-ac29-05a3ce8ae814",
+      "name": "Reply to a message in Gmail",
+      "webhookId": "b77947d6-ff9e-4ab1-87a1-e749dba0aa0a"
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1312,
+        864
+      ],
+      "id": "855a7260-cb39-4d7f-975e-c7422933e366",
+      "name": "Create a draft in Gmail",
+      "webhookId": "b77947d6-ff9e-4ab1-87a1-e749dba0aa0a"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1184,
+        864
+      ],
+      "id": "f6e6778d-97a0-4e23-994b-cccb03e333c8",
+      "name": "Delete a message in Gmail",
+      "webhookId": "b77947d6-ff9e-4ab1-87a1-e749dba0aa0a"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are a Master Agent Orchestrator who handles all things Email, Cal and Meetings -\n\n1. If the user asks for Email related query, Use the Email Agent Tool\n2. If the user asks for Calendar related query, Use the Calendar Agent Tool\n3. If the user asks for Meeting related query, Use the Meeting Agent Tool\n4. If the enquiry consists of the combination of commands, use the appropriate tools in the order of user's requirement to fulfil the request "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -1648,
+        432
+      ],
+      "id": "84d7f100-996f-4fe2-95fc-62d9af053232",
+      "name": "Master Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1904,
+        656
+      ],
+      "id": "dd504096-1942-4c31-bea5-f1e374561d22",
+      "name": "Google Gemini Chat Model1"
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1776,
+        656
+      ],
+      "id": "a74af057-7e1b-4d92-856b-df55a8d30db1",
+      "name": "Simple Memory1"
+    },
+    {
+      "parameters": {
+        "toolDescription": "AI Agent that can handle all things email",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "You are an expert email assistant who handles all things Email -\n1. If the user asks for send/compose/write an email, use the Send message tool\n2. If the user asks for Summarize/read/fetch emails, use the Get Many messages tool\n3. If the user asks to draft something, use the Draft a message tool\n4. If user either asks for Reply or Delete a message -\na. First read the emails in focus via Get Many messages tool\nb. Extract the Message ID relevant for the user's query and use the appropriate tool to perform the action. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1648,
+        656
+      ],
+      "id": "92459de8-3e80-4c73-a047-8f322a9177b2",
+      "name": "Email Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "AI Agent that can handle all things email",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "=You are an expert calendar assistant who handles all things Cal -\n\nBefore you perform any action, get the currentDate from Date & Time tool\n\n1. If the user asks for schedule/create an event, use the create event tool\n2. If the user asks for read/fetch events, use the Get Many events tool\n3. If the user asks to check availability, use the availability tool\n4. If user either asks for Upate or Delete an event -\na. First read the events in focus via Get Many events tool\nb. Extract the Event ID relevant for the user's query and use the appropriate tool to perform the action. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -688,
+        656
+      ],
+      "id": "aa9d6c20-9026-4432-9dd7-da2936f4a361",
+      "name": "Calendar Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1056,
+        864
+      ],
+      "id": "56b6d332-45bd-46e1-9df3-f64f7a9b7ce9",
+      "name": "Google Gemini Chat Model2"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -928,
+        864
+      ],
+      "id": "92889295-9e88-4eff-9826-cfc78e5e61e2",
+      "name": "Simple Memory2"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "akhi.the.techie@gmail.com",
+          "mode": "list",
+          "cachedResultName": "akhi.the.techie@gmail.com"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -800,
+        864
+      ],
+      "id": "4a3b27ab-16cd-436f-b875-a868d2b6b80b",
+      "name": "Get many events in Google Calendar"
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "value": "akhi.the.techie@gmail.com",
+          "mode": "list",
+          "cachedResultName": "akhi.the.techie@gmail.com"
+        },
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -672,
+        864
+      ],
+      "id": "8f2ac4b6-7110-46f1-9e04-393e0815e0d9",
+      "name": "Get availability in a calendar in Google Calendar"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "akhi.the.techie@gmail.com",
+          "mode": "list",
+          "cachedResultName": "akhi.the.techie@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -544,
+        864
+      ],
+      "id": "c73d849b-8b82-4f67-8792-48047eaa20da",
+      "name": "Create an event in Google Calendar"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "akhi.the.techie@gmail.com",
+          "mode": "list",
+          "cachedResultName": "akhi.the.techie@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -416,
+        864
+      ],
+      "id": "9b58f23f-09f5-4092-84d2-f3c31b06f912",
+      "name": "Delete an event in Google Calendar"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "akhi.the.techie@gmail.com",
+          "mode": "list",
+          "cachedResultName": "akhi.the.techie@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        -288,
+        864
+      ],
+      "id": "e6dbf080-03df-415e-b55d-6e7b59c7728c",
+      "name": "Update an event in Google Calendar"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTimeTool",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        864
+      ],
+      "id": "5230976a-c593-4059-a68d-6d63583a0cef",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        864
+      ],
+      "id": "d267d823-f125-4546-b004-8bc8dc4e5669",
+      "name": "Google Gemini Chat Model3"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        96,
+        864
+      ],
+      "id": "999d01f0-52e5-44d3-b9eb-a633c7f851a7",
+      "name": "Simple Memory3"
+    },
+    {
+      "parameters": {
+        "toolDescription": "AI Agent that can call al things meetings",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "=You are an expert meeting assistant who handles all things meetings -\n\n1. For every user query, first get all the list of trascripts using list of transcripts tool. \n\n2. Extract the relavant transcript ID from the list above, and construct the body for the next API call using the Transcript tool as follows -\n\n{\n  \"query\": \"query Transcript($transcriptId: String!) { transcript(id: $transcriptId) { id title sentences { speaker_name text start_time end_time } meeting_attendees { displayName email name } participants } }\",\n  \"variables\": {\n    \"transcriptId\": \"<insert_transcript_id_from_step_1>\"\n  }\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        656
+      ],
+      "id": "13a7f1c6-e06c-431f-8b1a-d7c3739a64d8",
+      "name": "Meeting Agent Tool"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.fireflies.ai/graphql",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer your_api_key"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "query { transcripts { id title date } }"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        864
+      ],
+      "id": "f644f623-057e-44a2-b7ba-faef14edd522",
+      "name": "List of Transcripts"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.fireflies.ai/graphql",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer your_api_key"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', ``, 'json') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        352,
+        864
+      ],
+      "id": "f344bba9-74f9-4fa8-83b9-7ee255ed56c5",
+      "name": "Transcript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Master Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many messages in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reply to a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a draft in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Master Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Master Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Master Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calendar Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Master Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get availability in a calendar in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calendar Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Meeting Agent Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory3": {
+      "ai_memory": [
+        [
+          {
+            "node": "Meeting Agent Tool",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Meeting Agent Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Master Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List of Transcripts": {
+      "ai_tool": [
+        [
+          {
+            "node": "Meeting Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcript": {
+      "ai_tool": [
+        [
+          {
+            "node": "Meeting Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "da7b9d77-6b9b-486b-9786-76b226f7cae7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "35af61cdb10af63706b8451b1603885f61fa5f7c5839f5f0bddf787166bda6f7"
+  },
+  "id": "p9fjtngAMj3BsITvnU4jI",
+  "tags": []
+}
