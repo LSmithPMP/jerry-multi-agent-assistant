@@ -3,7 +3,7 @@
 > **Applied Agentic AI Program · Week 1 · Interview Kickstart · Spring 2026**  
 > Lamonte Smith
 
-![Jerry — Multi-Agent Workflow](jerry-workflow-diagram.png)
+![Jerry — Multi-Agent Workflow](%20jerry-workflow-diagram.png)
 
 ---
 
