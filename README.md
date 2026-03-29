@@ -3,7 +3,7 @@
 > **Applied Agentic AI Program · Week 1 · Interview Kickstart · Spring 2026**  
 > Lamonte Smith
 
-![Jerry — Multi-Agent Workflow](jerry-workflow-diagram.png)
+![Jerry — Multi-Agent Workflow](_jerry-workflow-diagram.png)
 
 ---
 A conversational multi-agent personal assistant built in n8n that handles **email**, **calendar**, and **meeting intelligence** through a Master Agent orchestrating three specialist agents — all powered by Google Gemini.
